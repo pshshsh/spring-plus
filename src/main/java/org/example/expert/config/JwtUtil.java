@@ -21,9 +21,9 @@ import java.util.Date;
 public class JwtUtil {
 
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+    private static final long TOKEN_TIME = 60 * 60 * 1000L; // 유효시간 : 60분
 
-    @Value("${jwt.secret.key}")
+    @Value("${jwt.secret.key}") // application.properties 통해 비밀키 주입
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -34,16 +34,17 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
+    //JWT 토큰 생성
     public String createToken(Long userId, String email, String nickname, UserRole userRole) {
         Date date = new Date();
 
-        return BEARER_PREFIX +
+        return BEARER_PREFIX + // Bearer 문자열 추가
                 Jwts.builder()
                         .setSubject(String.valueOf(userId))
                         .claim("email", email)
                         .claim("nickname",nickname ) // 닉네임 추가
                         .claim("userRole", userRole)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간 설정
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                         .compact();
@@ -51,11 +52,12 @@ public class JwtUtil {
 
     public String substringToken(String tokenValue) {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
-            return tokenValue.substring(7);
+            return tokenValue.substring(7); // Bearer 제거
         }
         throw new ServerException("Not Found Token");
     }
 
+    // JWT에서 사용자 정보 추출
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)

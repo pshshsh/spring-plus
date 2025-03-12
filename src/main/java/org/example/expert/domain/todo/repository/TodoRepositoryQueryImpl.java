@@ -60,10 +60,10 @@ public class TodoRepositoryQueryImpl implements TodoRepositoryQuery {
         .leftJoin(todo.managers, manager)
         .leftJoin(todo.comments, comment)
         .where(
-            title != null ? todo.title.contains(title) : null,
+            title != null ? todo.title.contains(title) : null, //title이 null이면 조건제외
             startDate != null ? todo.createdAt.goe(startDate) : null,
             endDate != null ? todo.createdAt.loe(endDate) : null,
-            nickname != null ? manager.user.nickname.contains(nickname) : null
+            nickname != null ? todo.user.nickname.contains(nickname) : null
         )
         .groupBy(todo.id)
         .orderBy(todo.createdAt.desc())
