@@ -50,6 +50,7 @@ public class TodoRepositoryQueryImpl implements TodoRepositoryQuery {
       QTodo todo = QTodo.todo;
       QManager manager = QManager.manager;
       QComment comment = QComment.comment;
+      QUser user = QUser.user;
 
     List<TodoSearchResponse> response = jpaQueryFactory.select(new QTodoSearchResponse(
             todo.title,
@@ -58,12 +59,13 @@ public class TodoRepositoryQueryImpl implements TodoRepositoryQuery {
         ))
         .from(todo)
         .leftJoin(todo.managers, manager)
+        .leftJoin(manager.user, user)
         .leftJoin(todo.comments, comment)
         .where(
             title != null ? todo.title.contains(title) : null, //title이 null이면 조건제외
             startDate != null ? todo.createdAt.goe(startDate) : null,
             endDate != null ? todo.createdAt.loe(endDate) : null,
-            nickname != null ? todo.user.nickname.contains(nickname) : null
+            nickname != null ? user.nickname.contains(nickname) : null
         )
         .groupBy(todo.id)
         .orderBy(todo.createdAt.desc())
@@ -79,7 +81,7 @@ public class TodoRepositoryQueryImpl implements TodoRepositoryQuery {
             title != null ? todo.title.contains(title) : null,
             startDate != null ? todo.createdAt.goe(startDate) : null,
             endDate != null ? todo.createdAt.loe(endDate) : null,
-            nickname != null ? manager.user.nickname.contains(nickname) : null
+            nickname != null ? user.nickname.contains(nickname) : null
         )
         .fetchOne()).orElse(0L);
 

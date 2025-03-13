@@ -37,7 +37,12 @@ public class User extends Timestamped {
     }
 
     public static User fromAuthUser(AuthUser authUser) {
-        return new User(authUser.getId(), authUser.getEmail(),authUser.getNickname(), authUser.getUserRole());
+        return new User(authUser.getId(), authUser.getEmail(),authUser.getNickname(),
+            UserRole.valueOf(authUser.getAuthorities().stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 권한"))
+                .getAuthority())
+        );
     }
 
     public void changePassword(String password) {
