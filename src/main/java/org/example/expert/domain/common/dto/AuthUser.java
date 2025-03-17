@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.List;
-
+// 인증된 사용자의 정보를 담고 있는 역할 ,  사용자가 API요청시  JwtAuthenticationFilter에서 사용자가 담은 JWT 확인 후 AuthUser 생성
 @Getter
 public class AuthUser {
 

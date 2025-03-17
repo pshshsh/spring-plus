@@ -6,7 +6,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 // JWT 인증에서는 UserDetails를 사용하지 않기 때문에 AuthUser를 직접 저장
 // 로그인 후 SecurityContextHolder에 저장되어 , 인증된 사용자의 정보 조회할 수 있도록 제공
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
-
+  // JWT에서 추출한 사용자 정보 담는 DTO
   private final AuthUser authUser;
 
   public JwtAuthenticationToken(AuthUser authUser) {
@@ -20,6 +20,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     return null;
   }
 
+  // 현재 인증된 사용자 정보 반환
   @Override
   public Object getPrincipal() {
     return authUser;

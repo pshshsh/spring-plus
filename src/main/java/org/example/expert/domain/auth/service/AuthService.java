@@ -56,7 +56,7 @@ public class AuthService {
         if (!passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
             throw new AuthException("잘못된 비밀번호입니다.");
         }
-
+        // 로그인 성공하면 JWT 생성
         String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getNickname() ,user.getUserRole());
 
         return new SigninResponse(bearerToken);

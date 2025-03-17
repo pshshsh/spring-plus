@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse httpResponse,
       @NonNull FilterChain chain
   ) throws ServletException, IOException {
-    String authorizationHeader = httpRequest.getHeader("Authorization"); // 클라이언트가 헤더에 JWT 토큰 포함하여 요청 보냄
+    String authorizationHeader = httpRequest.getHeader("Authorization"); // Authorization 헤더에서 JWT 토큰 꺼내옴
 
     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) { // JWT가 Bearer로 시작하는지 확인
       String jwt = jwtUtil.substringToken(authorizationHeader); //JWT를 substringToken()으로 추출
@@ -63,10 +63,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String email = claims.get("email", String.class); // 이메일 추출
     String nickname = claims.get("nickname", String.class); // 닉네임 추출
     UserRole userRole = UserRole.of(claims.get("userRole", String.class)); // 역할 추출
-
-    AuthUser authUser = new AuthUser(userId, email,nickname,userRole); //AuthUser 객체 생성
+    // JWT에서 추출한 정보를 바탕으로 AuthUser 생성
+    AuthUser authUser = new AuthUser(userId, email, nickname, userRole);
+    // Spring Security의 Authentication 객체 생성
     JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(authUser);
-    SecurityContextHolder.getContext().setAuthentication(authenticationToken); // SecurityContextHolder에 authenticationTkoen 저장하여 인증 완료
+    //SecurityContextHolder에 저장하여 이후 요청에서 사용 가능하게 함
+    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
   }
-}
 
+}
