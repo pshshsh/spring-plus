@@ -59,12 +59,5 @@ public class S3Service {
     return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
   }
 
-  public void deleteFile(String fileName) {
-    DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
-        .bucket(bucketName)
-        .key(fileName)
-        .build();
 
-    s3Client.deleteObject(deleteRequest);
-  }
 }

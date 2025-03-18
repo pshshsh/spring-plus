@@ -22,9 +22,4 @@ public class S3Controller {
     return ResponseEntity.ok(imageUrl);
   }
 
-  @DeleteMapping("/delete")
-  public ResponseEntity<String> deleteImage(@RequestParam String fileName) {
-    s3Service.deleteFile(fileName);
-    return ResponseEntity.ok("삭제: " + fileName);
-  }
 }
