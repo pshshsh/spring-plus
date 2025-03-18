@@ -46,6 +46,7 @@ public class SecurityConfig {
             .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
             .requestMatchers("/open").permitAll()
             .requestMatchers("/health").permitAll()
+            .requestMatchers("/s3").permitAll()
             .anyRequest().authenticated()
         )
         .build();
