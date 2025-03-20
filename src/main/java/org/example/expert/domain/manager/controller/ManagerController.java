@@ -23,7 +23,6 @@ public class ManagerController {
     private final ManagerService managerService;
 
     @PostMapping("/todos/{todoId}/managers")
-    @Secured(UserRole.Authority.ADMIN)
     public ResponseEntity<ManagerSaveResponse> saveManager(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable long todoId,

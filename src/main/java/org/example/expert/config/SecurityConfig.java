@@ -43,8 +43,7 @@ public class SecurityConfig {
         .rememberMe(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(request -> request.getRequestURI().startsWith("/auth")).permitAll()
-            .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
-            .requestMatchers("/open").permitAll()
+            .requestMatchers("/admin/**").hasAuthority(UserRole.Authority.ADMIN)
             .requestMatchers("/health").permitAll()
             .requestMatchers("/s3").permitAll()
             .anyRequest().authenticated()
