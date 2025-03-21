@@ -25,4 +25,10 @@ public class UserController {
     public void changePassword(@AuthenticationPrincipal AuthUser authUser, @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         userService.changePassword(authUser.getId(), userChangePasswordRequest);
     }
+
+    // 닉네임 조건으로 유저 목록 검색
+    @GetMapping("/users/search")
+    public ResponseEntity<UserResponse> gutUserByNickname(@RequestParam String nickname){
+        return ResponseEntity.ok(userService.getUserByNickname(nickname));
+    }
 }

@@ -48,4 +48,10 @@ public class UserService {
             throw new InvalidRequestException("새 비밀번호는 8자 이상이어야 하고, 숫자와 대문자를 포함해야 합니다.");
         }
     }
+    // 닉네임으로 유저 검색
+    public UserResponse getUserByNickname(String nickname){
+        User findUser = userRepository.findByNickname(nickname)
+            .orElseThrow(() -> new RuntimeException("닉네임에 일치하는 사용자가 없습니다. "));
+        return new UserResponse(findUser.getId(),findUser.getEmail());
+    }
 }
